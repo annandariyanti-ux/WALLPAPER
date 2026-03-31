@@ -25,6 +25,36 @@ import { WALLPAPERS } from './constants';
 
 // --- Components ---
 
+const SafeImage = ({ src, alt, className, ...props }: any) => {
+  const [imgSrc, setImgSrc] = useState(src);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setImgSrc(src);
+    setHasError(false);
+  }, [src]);
+
+  const handleError = () => {
+    if (!hasError) {
+      setHasError(true);
+      // Fallback to picsum with a seed based on the filename
+      const seed = src.split('/').pop()?.split('.')[0] || 'wallpaper';
+      setImgSrc(`https://picsum.photos/seed/${seed}/800/1200`);
+    }
+  };
+
+  return (
+    <img 
+      src={imgSrc} 
+      alt={alt} 
+      className={className} 
+      onError={handleError}
+      referrerPolicy="no-referrer"
+      {...props}
+    />
+  );
+};
+
 const Navbar = ({ activePage, onNavigate }: { activePage: Page, onNavigate: (p: Page) => void }) => {
   const navItems: { id: Page; icon: any; label: string }[] = [
     { id: 'home', icon: HomeIcon, label: 'Home' },
@@ -72,7 +102,7 @@ const Header = ({ title, showBack, onBack }: { title: string; showBack?: boolean
       <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
     </div>
     <div className="w-10 h-10 rounded-full bg-neutral-200 flex items-center justify-center overflow-hidden border border-white shadow-sm">
-      <img src="/wallpapers/user-profile.jpeg" alt="User" referrerPolicy="no-referrer" />
+      <SafeImage src="/wallpapers/user-profile.jpeg" alt="User" />
     </div>
   </header>
 );
@@ -96,11 +126,10 @@ const HomePage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => (
         onClick={() => onNavigate('gallery')}
         className="group relative w-full h-48 rounded-[2.5rem] overflow-hidden shadow-lg transition-transform active:scale-95"
       >
-        <img 
+        <SafeImage 
           src="/wallpapers/hero-banner.jpeg" 
           alt="Featured" 
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute bottom-6 left-8 text-left">
@@ -175,11 +204,10 @@ const GalleryPage = () => {
             onClick={() => setSelectedWallpaper(wp)}
             className="relative rounded-3xl overflow-hidden shadow-sm cursor-pointer group"
           >
-            <img 
+            <SafeImage 
               src={wp.url} 
               alt={wp.title} 
               className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
-              referrerPolicy="no-referrer"
             />
             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
               <p className="text-white text-xs font-medium">{wp.title}</p>
@@ -205,11 +233,10 @@ const GalleryPage = () => {
               </button>
             </div>
             
-            <img 
+            <SafeImage 
               src={selectedWallpaper.url} 
               alt={selectedWallpaper.title} 
               className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
             />
 
             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[90%] max-w-md glass rounded-[2.5rem] p-8 flex flex-col gap-6">

@@ -19,7 +19,7 @@ export const WALLPAPERS: Wallpaper[] = [
     id: '3',
     title: 'Neon Fractal',
     category: 'Trippy',
-    url: '/wallpapers/rippy1.jpeg',
+    url: '/wallpapers/trippy1.jpeg',
     author: 'DigitalAcid'
   },
   {

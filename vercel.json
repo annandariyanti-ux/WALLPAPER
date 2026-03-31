@@ -1,7 +1,12 @@
 {
+  "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/((?!wallpapers/|assets/|favicon.ico).*)",
+      "source": "/wallpapers/(.*)",
+      "destination": "/wallpapers/$1"
+    },
+    {
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
