@@ -26,26 +26,24 @@ import { WALLPAPERS } from './constants';
 // --- Components ---
 
 const SafeImage = ({ src, alt, className, ...props }: any) => {
-  const [imgSrc, setImgSrc] = useState(src);
   const [hasError, setHasError] = useState(false);
 
-  useEffect(() => {
-    setImgSrc(src);
-    setHasError(false);
-  }, [src]);
-
-  const handleError = () => {
-    if (!hasError) {
-      setHasError(true);
-      // Fallback to picsum with a seed based on the filename
-      const seed = src.split('/').pop()?.split('.')[0] || 'wallpaper';
-      setImgSrc(`https://picsum.photos/seed/${seed}/800/1200`);
-    }
+  const handleError = (e: any) => {
+    console.error(`Failed to load image: ${src}`, e);
+    setHasError(true);
   };
+
+  if (hasError) {
+    return (
+      <div className={`${className} bg-neutral-200 flex items-center justify-center text-neutral-400 text-[10px] text-center p-2`}>
+        Image not found<br/>{src}
+      </div>
+    );
+  }
 
   return (
     <img 
-      src={imgSrc} 
+      src={src} 
       alt={alt} 
       className={className} 
       onError={handleError}
@@ -102,7 +100,7 @@ const Header = ({ title, showBack, onBack }: { title: string; showBack?: boolean
       <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
     </div>
     <div className="w-10 h-10 rounded-full bg-neutral-200 flex items-center justify-center overflow-hidden border border-white shadow-sm">
-      <SafeImage src="/wallpapers/user-profile.jpeg" alt="User" />
+      <SafeImage src="/user-profile.jpeg" alt="User" />
     </div>
   </header>
 );
@@ -127,7 +125,7 @@ const HomePage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => (
         className="group relative w-full h-48 rounded-[2.5rem] overflow-hidden shadow-lg transition-transform active:scale-95"
       >
         <SafeImage 
-          src="/wallpapers/hero-banner.jpeg" 
+          src="/hero-banner.jpeg" 
           alt="Featured" 
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
