@@ -27,22 +27,37 @@ import { WALLPAPERS } from './constants';
 
 const SafeImage = ({ src, alt, className, ...props }: any) => {
   const [hasError, setHasError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   const handleError = (e: any) => {
-    console.error(`Failed to load image: ${src}`, e);
+    console.error(`Failed to load image: ${src} (Attempt ${retryCount + 1})`, e);
     setHasError(true);
+  };
+
+  const handleRetry = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setHasError(false);
+    setRetryCount(prev => prev + 1);
   };
 
   if (hasError) {
     return (
-      <div className={`${className} bg-neutral-200 flex items-center justify-center text-neutral-400 text-[10px] text-center p-2`}>
-        Image not found<br/>{src}
+      <div className={`${className} bg-neutral-100 flex flex-col items-center justify-center text-neutral-500 p-4 border border-neutral-200 rounded-2xl`}>
+        <div className="text-[10px] font-bold uppercase tracking-wider mb-1 text-red-400">Image Not Found</div>
+        <div className="text-[10px] break-all text-center mb-3 opacity-60 font-mono">{src}</div>
+        <button 
+          onClick={handleRetry}
+          className="px-3 py-1 bg-white border border-neutral-200 rounded-full text-[10px] font-medium hover:bg-neutral-50 transition-colors shadow-sm"
+        >
+          Try Again
+        </button>
       </div>
     );
   }
 
   return (
     <img 
+      key={`${src}-${retryCount}`}
       src={src} 
       alt={alt} 
       className={className} 

@@ -1,9 +1,0 @@
-{
-  "cleanUrls": true,
-  "rewrites": [
-    {
-      "source": "/((?!assets/|.*\\.(?:jpeg|jpg|png|gif|svg|ico|webp|js|css|json|woff2?|ttf|otf)$).*)",
-      "destination": "/index.html"
-    }
-  ]
-}
