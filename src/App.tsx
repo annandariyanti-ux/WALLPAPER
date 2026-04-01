@@ -29,12 +29,11 @@ const SafeImage = ({ src, alt, className, ...props }: any) => {
   const [hasError, setHasError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
 
-  // Ensure path is correctly resolved relative to the base URL
-  const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
-  const cleanSrc = src.startsWith('/') ? `${baseUrl}${src}` : src;
+  // Use simple absolute path for public assets
+  const imageUrl = src;
 
   const handleError = (e: any) => {
-    console.error(`Failed to load image: ${cleanSrc} (Attempt ${retryCount + 1})`, e);
+    console.error(`Failed to load image: ${imageUrl}`, e);
     setHasError(true);
   };
 
@@ -47,8 +46,7 @@ const SafeImage = ({ src, alt, className, ...props }: any) => {
   if (hasError) {
     return (
       <div className={`${className} bg-neutral-100 flex flex-col items-center justify-center text-neutral-500 p-4 border border-neutral-200 rounded-2xl`}>
-        <div className="text-[10px] font-bold uppercase tracking-wider mb-1 text-red-400">Gambar Tidak Ditemukan</div>
-        <div className="text-[10px] break-all text-center mb-3 opacity-60 font-mono">{cleanSrc}</div>
+        <div className="text-[10px] font-bold uppercase tracking-wider mb-1 text-red-400">Error: {imageUrl}</div>
         <button 
           onClick={handleRetry}
           className="px-3 py-1 bg-white border border-neutral-200 rounded-full text-[10px] font-medium hover:bg-neutral-50 transition-colors shadow-sm"
@@ -61,8 +59,8 @@ const SafeImage = ({ src, alt, className, ...props }: any) => {
 
   return (
     <img 
-      key={`${cleanSrc}-${retryCount}`}
-      src={cleanSrc} 
+      key={`${imageUrl}-${retryCount}`}
+      src={imageUrl} 
       alt={alt} 
       className={className} 
       onError={handleError}
