@@ -29,8 +29,12 @@ const SafeImage = ({ src, alt, className, ...props }: any) => {
   const [hasError, setHasError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
 
+  // Ensure path is correctly resolved relative to the base URL
+  const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+  const cleanSrc = src.startsWith('/') ? `${baseUrl}${src}` : src;
+
   const handleError = (e: any) => {
-    console.error(`Failed to load image: ${src} (Attempt ${retryCount + 1})`, e);
+    console.error(`Failed to load image: ${cleanSrc} (Attempt ${retryCount + 1})`, e);
     setHasError(true);
   };
 
@@ -43,13 +47,13 @@ const SafeImage = ({ src, alt, className, ...props }: any) => {
   if (hasError) {
     return (
       <div className={`${className} bg-neutral-100 flex flex-col items-center justify-center text-neutral-500 p-4 border border-neutral-200 rounded-2xl`}>
-        <div className="text-[10px] font-bold uppercase tracking-wider mb-1 text-red-400">Image Not Found</div>
-        <div className="text-[10px] break-all text-center mb-3 opacity-60 font-mono">{src}</div>
+        <div className="text-[10px] font-bold uppercase tracking-wider mb-1 text-red-400">Gambar Tidak Ditemukan</div>
+        <div className="text-[10px] break-all text-center mb-3 opacity-60 font-mono">{cleanSrc}</div>
         <button 
           onClick={handleRetry}
           className="px-3 py-1 bg-white border border-neutral-200 rounded-full text-[10px] font-medium hover:bg-neutral-50 transition-colors shadow-sm"
         >
-          Try Again
+          Coba Lagi
         </button>
       </div>
     );
@@ -57,8 +61,8 @@ const SafeImage = ({ src, alt, className, ...props }: any) => {
 
   return (
     <img 
-      key={`${src}-${retryCount}`}
-      src={src} 
+      key={`${cleanSrc}-${retryCount}`}
+      src={cleanSrc} 
       alt={alt} 
       className={className} 
       onError={handleError}
@@ -70,10 +74,10 @@ const SafeImage = ({ src, alt, className, ...props }: any) => {
 
 const Navbar = ({ activePage, onNavigate }: { activePage: Page, onNavigate: (p: Page) => void }) => {
   const navItems: { id: Page; icon: any; label: string }[] = [
-    { id: 'home', icon: HomeIcon, label: 'Home' },
-    { id: 'gallery', icon: GalleryIcon, label: 'Start' },
-    { id: 'settings', icon: SettingsIcon, label: 'Settings' },
-    { id: 'about', icon: AboutIcon, label: 'About' },
+    { id: 'home', icon: HomeIcon, label: 'Beranda' },
+    { id: 'gallery', icon: GalleryIcon, label: 'Mulai' },
+    { id: 'settings', icon: SettingsIcon, label: 'Pengaturan' },
+    { id: 'about', icon: AboutIcon, label: 'Tentang' },
   ];
 
   return (
@@ -130,8 +134,8 @@ const HomePage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => (
     className="px-6 pb-32"
   >
     <div className="mb-10">
-      <p className="text-neutral-500 font-medium mb-2">Welcome back,</p>
-      <h2 className="text-4xl font-bold leading-tight">Find your <span className="text-neutral-400 italic">vibe</span> today.</h2>
+      <p className="text-neutral-500 font-medium mb-2">Selamat datang kembali,</p>
+      <h2 className="text-4xl font-bold leading-tight">Temukan <span className="text-neutral-400 italic">vibe</span>-mu hari ini.</h2>
     </div>
 
     <div className="grid gap-4">
@@ -146,8 +150,8 @@ const HomePage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => (
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute bottom-6 left-8 text-left">
-          <h3 className="text-white text-2xl font-bold mb-1">Start Exploring</h3>
-          <p className="text-white/80 text-sm">Browse the psychedelic collection</p>
+          <h3 className="text-white text-2xl font-bold mb-1">Mulai Menjelajah</h3>
+          <p className="text-white/80 text-sm">Telusuri koleksi psychedelic</p>
         </div>
         <div className="absolute bottom-6 right-8 w-10 h-10 glass rounded-full flex items-center justify-center text-white">
           <ChevronRight size={20} />
@@ -156,10 +160,10 @@ const HomePage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => (
 
       <div className="grid grid-cols-2 gap-4">
         {[
-          { id: 'gallery', label: 'Features', icon: Bell, color: 'bg-orange-50' },
-          { id: 'settings', label: 'Settings', icon: SettingsIcon, color: 'bg-blue-50' },
-          { id: 'about', label: 'About', icon: AboutIcon, color: 'bg-green-50' },
-          { id: 'gallery', label: 'Favorites', icon: Heart, color: 'bg-red-50' },
+          { id: 'gallery', label: 'Fitur', icon: Bell, color: 'bg-orange-50' },
+          { id: 'settings', label: 'Pengaturan', icon: SettingsIcon, color: 'bg-blue-50' },
+          { id: 'about', label: 'Tentang', icon: AboutIcon, color: 'bg-green-50' },
+          { id: 'gallery', label: 'Favorit', icon: Heart, color: 'bg-red-50' },
         ].map((item, idx) => (
           <button
             key={idx}
@@ -179,10 +183,10 @@ const HomePage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => (
 
 const GalleryPage = () => {
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null);
-  const [filter, setFilter] = useState<string>('All');
+  const [filter, setFilter] = useState<string>('Semua');
 
-  const categories = ['All', '1970s', 'Trippy', 'Psychedelic'];
-  const filteredWallpapers = filter === 'All' 
+  const categories = ['Semua', '1970-an', 'Trippy', 'Psychedelic'];
+  const filteredWallpapers = filter === 'Semua' 
     ? WALLPAPERS 
     : WALLPAPERS.filter(w => w.category === filter);
 
@@ -255,13 +259,13 @@ const GalleryPage = () => {
             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[90%] max-w-md glass rounded-[2.5rem] p-8 flex flex-col gap-6">
               <div>
                 <h3 className="text-2xl font-bold text-neutral-900 mb-1">{selectedWallpaper.title}</h3>
-                <p className="text-neutral-500 text-sm">by {selectedWallpaper.author} • {selectedWallpaper.category}</p>
+                <p className="text-neutral-500 text-sm">oleh {selectedWallpaper.author} • {selectedWallpaper.category}</p>
               </div>
               
               <div className="flex gap-4">
                 <button className="flex-1 bg-neutral-900 text-white h-14 rounded-2xl font-semibold flex items-center justify-center gap-2 active:scale-95 transition-transform">
                   <Download size={20} />
-                  Download
+                  Unduh
                 </button>
                 <button className="w-14 h-14 bg-neutral-100 text-neutral-600 rounded-2xl flex items-center justify-center active:scale-95 transition-transform">
                   <Heart size={20} />
@@ -310,29 +314,29 @@ const SettingsPage = () => {
       className="px-6 pb-32"
     >
       <div className="mb-8">
-        <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-4">Preferences</h3>
+        <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-4">Preferensi</h3>
         <SettingItem 
           icon={darkMode ? Moon : Sun} 
-          label="Dark Appearance" 
+          label="Tampilan Gelap" 
           value={darkMode} 
           onToggle={() => setDarkMode(!darkMode)} 
         />
         <SettingItem 
           icon={Bell} 
-          label="Push Notifications" 
+          label="Notifikasi Push" 
           value={notifications} 
           onToggle={() => setNotifications(!notifications)} 
         />
       </div>
 
       <div className="mb-8">
-        <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-4">Security</h3>
+        <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-4">Keamanan</h3>
         <div className="p-6 bg-white rounded-3xl border border-neutral-100 shadow-sm flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 bg-neutral-50 rounded-xl flex items-center justify-center text-neutral-600">
               <Shield size={20} />
             </div>
-            <span className="font-medium text-neutral-800">Privacy Policy</span>
+            <span className="font-medium text-neutral-800">Kebijakan Privasi</span>
           </div>
           <ChevronRight size={20} className="text-neutral-300" />
         </div>
@@ -353,14 +357,14 @@ const AboutPage = () => (
         <GalleryIcon size={40} />
       </div>
       <h2 className="text-2xl font-bold mb-2">Retro & Psychedelic Pro</h2>
-      <p className="text-neutral-400 text-sm mb-8">Version 1.0.4 • Premium Edition</p>
+      <p className="text-neutral-400 text-sm mb-8">Versi 1.0.4 • Edisi Premium</p>
       
       <div className="text-left space-y-6">
         <p className="text-neutral-600 leading-relaxed">
-          The ultimate destination for high-quality, curated wallpapers inspired by the vibrant aesthetics of the 1970s and the mind-bending world of psychedelic art.
+          Destinasi utama untuk wallpaper berkualitas tinggi yang dikurasi, terinspirasi oleh estetika cerah tahun 1970-an dan dunia seni psychedelic yang memukau.
         </p>
         <div className="pt-6 border-t border-neutral-50">
-          <h4 className="font-bold text-sm uppercase tracking-wider mb-4">Developed by</h4>
+          <h4 className="font-bold text-sm uppercase tracking-wider mb-4">Dikembangkan oleh</h4>
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-neutral-200" />
             <span className="font-medium">Aesthetic Labs Studio</span>
@@ -388,10 +392,10 @@ export default function App() {
 
   const getTitle = () => {
     switch (currentPage) {
-      case 'home': return 'Discover';
-      case 'gallery': return 'Gallery';
-      case 'settings': return 'Settings';
-      case 'about': return 'About';
+      case 'home': return 'Jelajahi';
+      case 'gallery': return 'Galeri';
+      case 'settings': return 'Pengaturan';
+      case 'about': return 'Tentang';
     }
   };
 

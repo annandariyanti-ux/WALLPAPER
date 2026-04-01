@@ -3,49 +3,49 @@ import { Wallpaper } from './types';
 export const WALLPAPERS: Wallpaper[] = [
   {
     id: '1',
-    title: 'Lava Lamp Dreams',
+    title: 'Mimpi Lampu Lava',
     category: 'Psychedelic',
     url: '/psychedelic1.jpeg',
     author: 'RetroVibe'
   },
   {
     id: '2',
-    title: 'Groovy Waves',
-    category: '1970s',
+    title: 'Gelombang Groovy',
+    category: '1970-an',
     url: '/retro1.jpeg',
     author: 'VintageSoul'
   },
   {
     id: '3',
-    title: 'Neon Fractal',
+    title: 'Fraktal Neon',
     category: 'Trippy',
     url: '/trippy1.jpeg',
     author: 'DigitalAcid'
   },
   {
     id: '4',
-    title: 'Mushroom Forest',
+    title: 'Hutan Jamur',
     category: 'Psychedelic',
     url: '/psychedelic2.jpeg',
     author: 'NatureHigh'
   },
   {
     id: '5',
-    title: 'Disco Sunset',
-    category: '1970s',
+    title: 'Matahari Terbenam Disko',
+    category: '1970-an',
     url: '/retro2.jpeg',
     author: 'Studio54'
   },
   {
     id: '6',
-    title: 'Cosmic Swirl',
+    title: 'Pusaran Kosmik',
     category: 'Trippy',
     url: '/trippy2.jpeg',
     author: 'SpaceExplorer'
   },
   {
     id: '7',
-    title: 'Kaleidoscope Eyes',
+    title: 'Mata Kaleidoskop',
     category: 'Psychedelic',
     url: '/psychedelic3.jpeg',
     author: 'MindBender'
@@ -53,7 +53,7 @@ export const WALLPAPERS: Wallpaper[] = [
   {
     id: '8',
     title: 'Velvet Underground',
-    category: '1970s',
+    category: '1970-an',
     url: '/retro3.jpeg',
     author: 'ArtNouveau'
   }
